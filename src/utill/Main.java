@@ -1,14 +1,14 @@
-package Util;
+package utill;
 
+import Residents.*;
+import org.ini4j.Ini;
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import Residents.Resident;
-import Residents.Residents;
-import org.ini4j.Ini;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -18,29 +18,35 @@ public class Main {
 
     private static void initGraph() throws IOException {
         Ini ini = new Ini(new File("./src/config.ini"));
-        Map<String, String> virusParams = ini.get("default");
-        Simulator simulator = new Simulator();
-        Thread panelThread = new Thread(simulator);
+        Map<String, String> map = ini.get("default");
         JFrame frame = new JFrame();
-        frame.add(simulator);
-        frame.setSize(Integer.parseInt(virusParams.get("city_area_width"))+300, Integer.parseInt(virusParams.get("city_area_height")));
-        frame.setLocationRelativeTo(null);
+        JPanel ui = new JPanel();
+        ui.setLayout(new GridLayout(1,3));
+        Simulator graph = new Simulator();
+        Thread panelThread = new Thread(graph);
+        ui.add(graph);
+        ui.add(new Charts());
+        ui.setBackground(Color.BLACK);
+        frame.add(ui);
         frame.setVisible(true);
-        frame.setTitle(virusParams.get("virus_simulation"));
+        frame.setTitle(map.get("virus_simulation")+" of "+map.get("city_population")+" Residents of Boston");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1200, 600);
+        frame.setResizable(false);
+        frame.setLocation(50, 50);
         panelThread.start();
     }
 
     private static void initInfected() throws IOException {
         Ini ini = new Ini(new File("./src/config.ini"));
         Map<String, String> virusParams = ini.get("default");
-        List<Resident> residentList = Residents.getInstance().getResidentList();
+        List<Resident> residentList = ResidentDirectory.getInstance().getResidentList();
         for (int i = 0; i < Integer.parseInt(virusParams.get("randomly_infected")); i++) {
             Resident resident;
             do {
                 resident = residentList.get(new Random().nextInt(residentList.size() - 1));
             } while (resident.isInfected());
-            resident.beInfected();
+            resident.infectResident();
         }
     }
 
