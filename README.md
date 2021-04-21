@@ -10,7 +10,7 @@ Details about the simulation and the project can be found in the [Project Report
 
 #
 <p align="center">
-<img src="assets/SimulationImage1.png" width=500>
+<img src="assets/SimulationImage1.gif" width=500>
 <br>
 
 ## References
