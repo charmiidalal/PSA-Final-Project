@@ -1,13 +1,15 @@
 package utill;
+
+import Residents.*;
+import org.ini4j.Ini;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
-
-import Residents.*;
-import org.ini4j.Ini;
+import java.util.Map;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws IOException {

@@ -1,5 +1,3 @@
-import City.City;
-import Residents.Resident;
 import utill.Simulator;
 import org.junit.Test;
 

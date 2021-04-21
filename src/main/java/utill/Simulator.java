@@ -48,13 +48,13 @@ public class Simulator extends JPanel implements Runnable {
         for (Resident Resident : people) {
             switch (Resident.getInfection_status()) {
                 case 0: {
-                    //green for vaccinated
-                    graphics.setColor(new Color(0xFF655));
+                    //green for normal
+                    graphics.setColor(new Color(0xF6BD2B));
                     break;
                 }
                 case 1: {
-                    //yellow for shadow patients
-                    graphics.setColor(new Color(0xffee00));
+                    //yellow for suspected patients
+                    graphics.setColor(new Color(0xF8752E));
                     break;
                 }
                 case 2: {

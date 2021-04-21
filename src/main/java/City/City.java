@@ -1,8 +1,5 @@
 package City;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /* This is the City class which is intialized when program is started */
 public class City {
     private int centerX;

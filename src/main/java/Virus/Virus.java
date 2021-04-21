@@ -1,7 +1,8 @@
 package Virus;
 
-import org.ini4j.Ini;
 import Residents.Resident;
+import org.ini4j.Ini;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
