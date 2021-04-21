@@ -1,7 +1,5 @@
 package City;
 
-import java.util.Random;
-
 public class Location {
     private int x;
     private int y;
