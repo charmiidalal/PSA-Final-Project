@@ -74,7 +74,7 @@ public class Simulator extends JPanel implements Runnable {
                 Resident.checkHealth();
 
             //vaccinating people by checking their vaccinated status and doses remaining in a day
-            if (pandemicDay % 100 == 0) {
+            if (pandemicDay > Integer.parseInt(map.get("vaccination_discovery_time"))) {
                 if (dosesPerDay > 0 && Resident.isVaccinated() == false) {
                     Resident.setVaccinated(true);
                     dosesPerDay--;

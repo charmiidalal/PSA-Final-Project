@@ -13,6 +13,12 @@ Details about the simulation and the project can be found in the [Project Report
 <img src="assets/SimulationImage.JPG" width=500>
 <br>
 
+## Import Instructions
+1. Import Project as Maven
+2. Right click on Test folder and Mark Directory as Test Folder
+3. To run test cases, Right click on java folder and Run "All Tests" with coverage
+4. If main class is not set automatically then set "utill.Main" as main.
+
 ## References
 Created by:<br>
  [Charmi Dalal](https://github.com/charmiidalal) <br>
