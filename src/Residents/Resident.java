@@ -12,31 +12,34 @@ import java.util.Map;
 import java.util.Random;
 
 public class Resident extends Location {
+    //INI file which has all the needed factors and values
     Ini ini = new Ini(new File("./src/config.ini"));
+    // These are for the virus factors
     Map<String, String> map = ini.get("default");
+    //This shows current health of residents
     Map<String, String> resident_status = ini.get("resident_status");
     int moveScale = 1;
     int age;
     double xAxis;
     double yAxis;
-    int infecteDay = 0;
-    int diagnoseDay = 0;
-    int possibleDeathDay = 0;
-    int isolationDay = 0;
-    boolean isVaccinated = false;
+    int infecteDay = 0; //The day on which infection occured
+    int diagnoseDay = 0; //the day on which infection detected
+    int possibleDeathDay = 0; // Estimated death tday
+    int isolationDay = 0; //The isolation start day
+    boolean isVaccinated = false; //Checks if person is vaccinated or not
     private City city;
     private RandomMove randomMove;
     private Virus virus;
-    private Boolean isSuperSpreader = false;
-    private Boolean isCured = false;
-    private Boolean isIsolated = false;
+    private Boolean isSuperSpreader = false; //If resident is super spreader
+    private Boolean isCured = false; //Checks if resdient had virus or not
+    private Boolean isIsolated = false; //Checks resident's isolation status
     private int infection_status = Integer.parseInt(resident_status.get("negative"));
 
     public Resident(City city, int x, int y) throws IOException {
         super(x, y);
         this.virus = new Virus();
         this.city = city;
-        this.setAge();
+        this.setAge(); //set random age of resident
         xAxis = MathUtil.stdGaussian(100, x);
         yAxis = MathUtil.stdGaussian(100, y);
     }
@@ -117,6 +120,7 @@ public class Resident extends Location {
         this.age = (int) (Math.random() * 100);
     }
 
+    //Checks possibilty of infected resident's isolation with help of non_isolating_rate
     public void setIsIsolating() {
         float isoPossiblity = new Random().nextFloat();
         if (isoPossiblity < Float.parseFloat(map.get("non_isolating_rate"))) {
@@ -147,6 +151,7 @@ public class Resident extends Location {
         isVaccinated = vaccinated;
     }
 
+    /* randomly infects resident and assigns random viral load */
     public void infectResident() {
         float randomLoad = new Random().nextFloat();
         virus.setViralLoad();
@@ -158,10 +163,12 @@ public class Resident extends Location {
         this.infecteDay = Simulator.pandemicDay;
     }
 
+    /*calculate distance to check if residents are following social distancing */
     public double calculateDistance(Resident resident) {
         return Math.sqrt(Math.pow(this.getX() - resident.getX(), 2) + Math.pow(this.getY() - resident.getY(), 2));
     }
 
+    /* Does random movement to spread virus */
     private void doRandomMove() {
         if (this.isIsolated) {
             return;
@@ -223,12 +230,14 @@ public class Resident extends Location {
         reLocate(udX, udY);
     }
 
+    /* checks status of patiets by counting isolation and mortality rates*/
     public void checkHealth() {
         double targetX = MathUtil.stdGaussian(100, xAxis);
         double targetY = MathUtil.stdGaussian(100, yAxis);
         randomMove = new RandomMove((int) targetX, (int) targetY);
         if (!this.isIsolated)
             doRandomMove();
+        /* checks if quarantine time is over and if yes then does random movement */
         if (this.isIsolated) {
             if (Simulator.pandemicDay - this.isolationDay > Integer.parseInt(map.get("quarantine_time"))) {
                 this.isIsolated = false;
@@ -240,6 +249,7 @@ public class Resident extends Location {
                 reLocate(x,y);
             }
         }
+        /*Checks if patient is recovered and sets it negative*/
         if (infection_status == Integer.parseInt(resident_status.get("positive")) && this.possibleDeathDay == 0) {
             if (Simulator.pandemicDay - this.diagnoseDay >= Integer.parseInt(map.get("hospitalized_days"))) {
                 float ranDeathPoss = new Random().nextFloat();
@@ -262,18 +272,20 @@ public class Resident extends Location {
             }
         }
 
+        //Checks if certain days are passed and if not recovered marks it as dead
         if (this.infection_status == Integer.parseInt(resident_status.get("positive")) && Simulator.pandemicDay >= possibleDeathDay && possibleDeathDay > 0) {
             this.infection_status = Integer.parseInt(resident_status.get("dead"));
             setX(300);
             setY(300);
         }
 
+        //If incubation oeriod is over then mark as positive
         double incubationPeriod = MathUtil.stdGaussian(25, Integer.parseInt(map.get("quarantine_time")) / 2);
         if (Simulator.pandemicDay - this.infecteDay > incubationPeriod && this.infection_status == Integer.parseInt(resident_status.get("suspected"))) {
             this.infection_status = Integer.parseInt(resident_status.get("positive"));
             this.diagnoseDay = Simulator.pandemicDay;
         }
-
+        //Checks risk of residents to get infect with respect to its contyact with other residents
         if (this.infection_status < Integer.parseInt(this.resident_status.get("suspected"))) {
             List<Resident> people = ResidentDirectory.getInstance().residentList;
             for (Resident resident : people) {

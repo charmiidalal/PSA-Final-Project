@@ -6,6 +6,7 @@ public class Location {
     private int x;
     private int y;
 
+    /* Defines x and y coordinates of the ball */
     public Location(int x, int y) {
         this.x = x;
         this.y = y;

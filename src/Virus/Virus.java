@@ -10,7 +10,7 @@ import java.util.Random;
 public class Virus {
     Ini ini = new Ini(new File("./src/config.ini"));
     Map<String, String> map = ini.get("default");
-    int viralLoad;
+    int viralLoad; //Viral load can decide super spreader residents
 
     public int getViralLoad() {
         return viralLoad;
@@ -23,6 +23,7 @@ public class Virus {
     public Virus() throws IOException {
     }
 
+    /* checks resident's mortality rate with respect to thier age */
     public float getFatalityRateByAge(Resident resident){
         if(resident.getAge() >= 0 && resident.getAge() < 10)
             return Float.parseFloat(map.get("mortality_0_9"));
@@ -47,6 +48,7 @@ public class Virus {
 
     }
 
+    /* This method checks risk of virus with different type of masks risks*/
     public float calMaskRisk() {
         String[] maskType = {"cloth_mask_risk_rate", "surgical_mask_risk_rate", "n95_mask_risk_rate"};
         Random generator = new Random();
@@ -54,6 +56,7 @@ public class Virus {
         return  Float.parseFloat(map.get(maskType[randomIndex]));
     }
 
+    /* This method checks the possiblity of wearing masks by residents */
     public boolean calMaskWearRatio() {
         float randomRisk = new Random().nextFloat();
         if (randomRisk < Float.parseFloat(map.get("mask_wearing_risk")))
@@ -62,6 +65,7 @@ public class Virus {
             return false;
     }
 
+    /* This method gathers all factors related to getting infection and calculates infection risk*/
     public float calculateInfectionRisk(Resident resident){
         float risk = Float.parseFloat(map.get("broad_risk_rate"));
         if (resident.isVaccinated()) {

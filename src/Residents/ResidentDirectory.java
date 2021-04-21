@@ -19,14 +19,13 @@ public class ResidentDirectory {
     private ResidentDirectory() throws IOException {
         Ini ini = new Ini(new File("./src/config.ini"));
         Map<String, String> map = ini.get("default");
-        City city = new City(300, 300);//position of city center-->(400,400)
-        //add people in this city
+        City city = new City(300, 300);
         for (int i = 0; i < Integer.parseInt(map.get("city_population")); i++) {
             Random random = new Random();
-            //generate the position of people-->N(a,b)：Math.sqrt(b)*random.nextGaussian()+a
+            //Randomly puts balls in city to simulate virus
             int x = (int) (100 * random.nextGaussian() + city.getCenterX());
             int y = (int) (100 * random.nextGaussian() + city.getCenterY());
-            if (x > 700) x = 700;//people cannot be out the range of city
+            if (x > 700) x = 700;
             residentList.add(new Resident(city, x, y));
         }
     }
@@ -47,6 +46,7 @@ public class ResidentDirectory {
         return residentList;
     }
 
+    /* This method fetches vaccinated people in city */
     public int getVaccinatedResidents() {
         int vac = 0;
         for (Resident p : residentList) {
@@ -56,7 +56,7 @@ public class ResidentDirectory {
         }
         return vac;
     }
-
+    /* This method takes virus status and counts people by it */
     public int getResidentNumberbyStatus(int virusStatus) {
         int i = 0;
         for (Resident resident : residentList) {
@@ -66,7 +66,7 @@ public class ResidentDirectory {
         }
         return i;
     }
-
+    /* This method fetches the list of super spreder in city */
     public int getSuperSpreaders() {
         int i = 0;
         for (Resident resident : residentList) {
@@ -79,6 +79,7 @@ public class ResidentDirectory {
         }
         return i;
     }
+    /* This method fetches the list of total cases till day */
     public int getTotalCases() {
         int i = 0;
         for (Resident resident : residentList) {
@@ -88,6 +89,7 @@ public class ResidentDirectory {
         }
         return i;
     }
+    /* This method fetches the list of current isolating people */
     public int getTotalIsolated() {
         int i = 0;
         for (Resident resident : residentList) {
@@ -97,6 +99,7 @@ public class ResidentDirectory {
         }
         return i;
     }
+    /* This method fetches the list of all cured people */
     public int getCuredResidents() {
         int i = 0;
         for (Resident resident : residentList) {

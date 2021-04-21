@@ -3,8 +3,10 @@ package City;
 public class RandomMove {
     private int xAxis;
     private int yAxis;
+    //Checks if ball is relocated to new position or not
     private boolean reLocated =false;
 
+    /* This x and y coordinates defines random move of the ball*/
     public RandomMove(int xAxis, int y) {
         this.xAxis = xAxis;
         this.yAxis = y;
